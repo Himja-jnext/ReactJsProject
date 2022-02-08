@@ -1,10 +1,17 @@
 import react, { useState } from "react";
 
 const Table = (props) => {
-  const { usertabval } = props;
+  const { usertabval, numofdata } = props;
   // console.log("usertabval", usertabval);
   return (
     <>
+      <input
+        type="text"
+        name="Search"
+        id="Search"
+        placeholder="Search data by Name"
+        onChange={(e) => props.handleInputChange(e)}
+      />
       <table className="tablesection">
         <thead>
           <th>Id</th>
@@ -15,7 +22,7 @@ const Table = (props) => {
         </thead>
         <tbody>
           {usertabval?.map((item, index) => {
-            // console.log("item", item,index);
+            // console.log("item", usertabval, item, index);
             return (
               <tr>
                 <td>{index}</td>
@@ -40,6 +47,7 @@ const Table = (props) => {
           })}
         </tbody>
       </table>
+      <h5 className="datacounter">Number of Data : {numofdata}</h5>
     </>
   );
 };

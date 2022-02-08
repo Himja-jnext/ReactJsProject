@@ -1,11 +1,17 @@
 import React from "react";
 
 const StudentForm = (props) => {
-  const { singleUserinfo } = props;
+  const { singleUserinfo, UpdatedData } = props;
+
   // console.log("singleUserinfo", singleUserinfo);
   return (
     <>
-      <form className="dataform" onSubmit={(e) => props.submitData(e)}>
+      <form
+        className="dataform"
+        onSubmit={(e) =>
+          UpdatedData ? props.onupdatedata(e) : props.submitData(e)
+        }
+      >
         <div className="datablock">
           <lable htmlFor="Name">Name:</lable>
           <br></br>
@@ -60,7 +66,7 @@ const StudentForm = (props) => {
         </div>
 
         <button type="submit" className="sub-btn">
-          Submit
+          {UpdatedData ? "Update" : "Submit"}
         </button>
       </form>
     </>

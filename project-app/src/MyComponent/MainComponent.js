@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Table from "./TableComponent";
 import StudentForm from "./FormComponent";
+import { click } from "@testing-library/user-event/dist/click";
 
 const TabForm = (props) => {
   // const userdata = [
@@ -30,51 +31,92 @@ const TabForm = (props) => {
   //   },
   // ];
 
-  const [singleuserdata, setSingleuserdata] = useState({});
+  const [formData, setFormData] = useState({});
   const [userdata, setUserdata] = useState([]);
-  // const [formData, setFormData] = useState(0);
+  const [update, setUpdate] = useState(false);
+  const [clickData, setClickData] = useState({});
+  const [countdata, setCountdata] = useState(0);
+  const [search, setSearch] = useState("");
 
   const addItem = (item) => {
-    // console.log("item", item);
-    setSingleuserdata(item);
+    setClickData(item);
+    console.log("clickData", item.userId);
+    setFormData(item);
+    setUpdate(true);
   };
   const removeItem = (item, index) => {
     console.log("userdata", userdata, index, item);
     const removedata = userdata.splice(index, 1);
-    console.log("removedata", removedata);
-    setSingleuserdata(item);
+    // console.log("removedata", removedata);
+
     setUserdata(userdata);
-    console.log("userdata", userdata);
+    setCountdata(countdata - 1);
   };
 
   const inputchange = (e) => {
     let name = e.target.name;
     let value = e.target.value;
-    const data = { ...singleuserdata, [name]: value };
-    setSingleuserdata(data);
+    const data = { ...formData, [name]: value };
+    setFormData(data);
+    setSearch(e.target.value);
+  };
+  const searchvalue = {
+    userdata: userdata.filter((item) => {
+      item?.Name.includes(search);
+    }),
   };
 
   const onFormsubmit = (e) => {
     e.preventDefault();
-    userdata.push(singleuserdata);
-
-    console.log("hello ReactJs!", userdata);
+    let obj = { userId: userdata?.length, ...formData };
+    userdata.push(obj);
+    console.log("userdata", userdata);
     setUserdata(userdata);
-
-    setSingleuserdata({ singleuserdata });
+    setFormData({});
     e.target.reset();
-    // setFormData(formData + 1);
-    // console.log("formData", formData);
+    setUpdate(false);
+    setCountdata(countdata + 1);
+    // console.log("countdata", countdata);
+  };
+
+  const onUpdate = (e) => {
+    e.preventDefault();
+    console.log("item", formData);
+    var userupdatedata = [];
+    userdata.map((item, id) => {
+      var object = {
+        ...item,
+        Name: item?.userId === clickData?.userId ? formData?.Name : item?.Name,
+        Std: item?.userId === clickData?.userId ? formData?.Std : item?.Std,
+        Marks:
+          item?.userId === clickData?.userId ? formData?.Marks : item?.Marks,
+        Grade:
+          item?.userId === clickData?.userId ? formData?.Grade : item?.Grade,
+      };
+      return (userupdatedata[id] = object);
+    });
+    setUserdata(userupdatedata);
+    setFormData({});
+    setUpdate(false);
+    e.target.reset();
   };
 
   return (
     <>
       <StudentForm
         submitData={onFormsubmit}
-        singleUserinfo={singleuserdata}
+        singleUserinfo={formData}
         handleInputChange={inputchange}
+        UpdatedData={update}
+        onupdatedata={onUpdate}
       />
-      <Table usertabval={userdata} editItem={addItem} deleteItem={removeItem} />
+      <Table
+        searchvalue={searchvalue}
+        usertabval={userdata}
+        editItem={addItem}
+        deleteItem={removeItem}
+        numofdata={countdata}
+      />
     </>
   );
 };
