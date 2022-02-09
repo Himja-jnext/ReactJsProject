@@ -9,8 +9,10 @@ const Table = (props) => {
         type="text"
         name="Search"
         id="Search"
+        // value={Searchdata.value}
+        className="searchfiled"
         placeholder="Search data by Name"
-        onChange={(e) => props.handleInputChange(e)}
+        onChange={(e) => props.searchData(e)}
       />
       <table className="tablesection">
         <thead>

@@ -40,6 +40,11 @@ td{
     padding: 6px 18px;
     font-size: 13px;
 }
+.searchfiled{
+    margin: 20px 0 0 200px;
+    padding: 5px;
+    width: 30%;
+}
 .datacounter{
     margin: 20px 0 30px 200px;
 }

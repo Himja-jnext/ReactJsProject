@@ -58,19 +58,30 @@ const TabForm = (props) => {
     let value = e.target.value;
     const data = { ...formData, [name]: value };
     setFormData(data);
-    setSearch(e.target.value);
   };
-  const searchvalue = {
-    userdata: userdata.filter((item) => {
-      item?.Name.includes(search);
-    }),
+
+  const onsearch = (e) => {
+    // setSearch(e.target.value);
+    let searchvalue = e.target.value;
+    let searchstring = searchvalue.trim().toLowerCase();
+    console.log("searchstring", searchstring, searchstring.length);
+    if (searchstring?.length > 0) {
+      setUserdata(
+        userdata?.filter((item) => {
+          item?.Name.toLowerCase().includes(searchstring);
+          console.log("Name", item?.Name.toLowerCase(), userdata);
+        })
+      );
+    } else {
+      setUserdata(userdata);
+    }
   };
 
   const onFormsubmit = (e) => {
     e.preventDefault();
     let obj = { userId: userdata?.length, ...formData };
     userdata.push(obj);
-    console.log("userdata", userdata);
+    // console.log("userdata", userdata);
     setUserdata(userdata);
     setFormData({});
     e.target.reset();
@@ -81,7 +92,7 @@ const TabForm = (props) => {
 
   const onUpdate = (e) => {
     e.preventDefault();
-    console.log("item", formData);
+    // console.log("item", formData);
     var userupdatedata = [];
     userdata.map((item, id) => {
       var object = {
@@ -111,10 +122,10 @@ const TabForm = (props) => {
         onupdatedata={onUpdate}
       />
       <Table
-        searchvalue={searchvalue}
         usertabval={userdata}
         editItem={addItem}
         deleteItem={removeItem}
+        searchData={onsearch}
         numofdata={countdata}
       />
     </>
